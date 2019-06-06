@@ -15,6 +15,12 @@
     if(self = [super init]) {
         _identifier = attributes[@"id"];
         _name = attributes[@"name"];
+        _rating = [attributes[@"rating"] doubleValue];
+        _reviewCount = [attributes[@"review_count"] integerValue];
+        _distance = [attributes[@"distance"] doubleValue];
+        _price = attributes[@"price"];
+        _imageURLString = attributes[@"image_url"];
+        _categories = attributes[@"categories"];
     }
     
     return self;

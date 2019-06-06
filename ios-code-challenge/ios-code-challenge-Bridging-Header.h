@@ -8,3 +8,5 @@
 #import "AFYelpAPIClient+Search.h"
 #import "YLPSearch.h"
 #import "YLPBusiness.h"
+#import "NXTBusinessTableViewCell.h"
+#import "NXTBindingDataForObjectDelegate.h"
