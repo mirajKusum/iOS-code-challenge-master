@@ -42,6 +42,7 @@ class MasterViewController: UITableViewController {
                     return
             }
             dataSource.setObjects(businesses)
+            dataSource.sort()
             strongSelf.tableView.reloadData()
         })
     }
