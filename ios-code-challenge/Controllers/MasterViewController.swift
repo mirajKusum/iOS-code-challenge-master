@@ -14,9 +14,10 @@ class MasterViewController: UITableViewController {
     var detailViewController: DetailViewController?
     private var business = YLPBusiness()
     private var locationService = LocationService()
+    let searchController = UISearchController(searchResultsController: nil)
     
-    lazy private var dataSource: NXTDataSource? = {
-        guard let dataSource = NXTDataSource(objects: nil) else { return nil }
+    lazy private var dataSource: NXTSearchDataSource? = {
+        guard let dataSource = NXTSearchDataSource(objects: nil) else { return nil }
         dataSource.tableViewDidReceiveData = { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.tableView.reloadData()
@@ -37,6 +38,12 @@ class MasterViewController: UITableViewController {
         tableView.delegate = dataSource
         
         locationService.setDelegate(viewController: self)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Business"
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -84,4 +91,25 @@ extension MasterViewController: CLLocationManagerDelegate {
             strongSelf.tableView.reloadData()
         })
     }
+}
+
+extension MasterViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        dataSource?.filterObjectForSearchText(searchController.searchBar.text!)
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        dataSource?.isFiltering = false
+        tableView.reloadData()
+    }
+    
+    func searchBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func isSearching() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }
+    
 }

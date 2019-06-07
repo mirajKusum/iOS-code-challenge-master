@@ -10,3 +10,5 @@
 #import "YLPBusiness.h"
 #import "NXTBusinessTableViewCell.h"
 #import "NXTBindingDataForObjectDelegate.h"
+#import "NXTCellForObjectDelegate.h"
+#import "YLPBusiness+CellForObject.h"
