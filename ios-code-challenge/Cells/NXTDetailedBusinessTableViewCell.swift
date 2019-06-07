@@ -10,6 +10,12 @@ import UIKit
 
  class NXTDetailedBusinessTableViewCell: NXTBusinessTableViewCell {
 
+    private var business: YLPBusiness?
+    lazy private var businessService: BusinessService? = {
+        guard let business = self.business else { return nil }
+        return BusinessService(business: business)
+    }()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -25,33 +31,17 @@ import UIKit
     // MARK: - Private
     
     private func configureCell(with business: YLPBusiness) {
+        self.business = business
         nameLabel.text = business.name
-        ratingLabel.text = String("Rating: \(business.rating)")
-        distanceLabel.text = String(format: "%.02f miles", business.distance/1000)
-        reviewLabel.text = String("\(business.reviewCount) reviews")
-        configureImage(from: business.imageURLString)
-        setCategoriesString(with: business.categories)
-    }
-    
-    private func configureImage(from urlString: String) {
-        guard let url = URL(string: urlString) else { return }
-        
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.thumbnailImageview.image = image
-                    }
-                }
+        ratingLabel.text = businessService?.setRating()
+        distanceLabel.text = businessService?.setDistance()
+        reviewLabel.text = businessService?.setReview()
+        categoryLabel.text = businessService?.setCategory()
+        businessService?.setImage { [weak self] image in
+            DispatchQueue.main.async {
+                self?.thumbnailImageview.image = image
             }
         }
-    }
-    
-    private func setCategoriesString(with categories: [Any]) {
-        guard let categories = categories as? [Dictionary<String, String>] else { return }
-        
-        let categoryArray = categories.map { $0["title"]! }
-        categoryLabel.text = categoryArray.joined(separator: ", ")
     }
 }
 

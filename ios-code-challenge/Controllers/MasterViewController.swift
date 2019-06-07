@@ -11,12 +11,19 @@ import UIKit
 class MasterViewController: UITableViewController {
     
     var detailViewController: DetailViewController?
+    private var business = YLPBusiness()
     
     lazy private var dataSource: NXTDataSource? = {
         guard let dataSource = NXTDataSource(objects: nil) else { return nil }
         dataSource.tableViewDidReceiveData = { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.tableView.reloadData()
+        }
+        dataSource.tableViewDidSelectCell = { [weak self] business in
+            if let business = business as? YLPBusiness {
+                self?.business = business
+            }
+            self?.performSegue(withIdentifier: "showDetail", sender: self)
         }
         return dataSource
     }()
@@ -47,14 +54,15 @@ class MasterViewController: UITableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
-//            guard let indexPath = tableView.indexPathForSelectedRow,
-//                let controller = segue.destination as? DetailViewController else {
-//                return
-//            }
-//            let object = objects[indexPath.row]
-//            controller.setDetailItem(newDetailItem: object)
-//            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
-//            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let controller = segue.destination as? UINavigationController else {
+                return
+            }
+            
+            if let detailVC = controller.viewControllers.first as? DetailViewController {
+                detailVC.setDetailItem(newDetailItem: self.business)
+                detailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+                detailVC.navigationItem.leftItemsSupplementBackButton = true
+            }
         }
     }
 

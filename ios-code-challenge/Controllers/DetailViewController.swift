@@ -10,10 +10,17 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var imageview: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var reviewLabel: UILabel!
+    @IBOutlet weak var gradientView: UIView!
+
     lazy private var favoriteBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "Star-Outline"), style: .plain, target: self, action: #selector(onFavoriteBarButtonSelected(_:)))
 
-    @objc var detailItem: NSDate?
+    @objc var detailItem: YLPBusiness?
     
     private var _favorite: Bool = false
     private var isFavorite: Bool {
@@ -22,22 +29,43 @@ class DetailViewController: UIViewController {
         } 
     }
     
+    lazy private var businessService: BusinessService? = {
+        guard let business = self.detailItem else { return nil }
+        return BusinessService(business: business)
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        gradientView.isHidden = true
         configureView()
         navigationItem.rightBarButtonItems = [favoriteBarButtonItem]
     }
     
-    private func configureView() {
-        guard let detailItem = detailItem else { return }
-        detailDescriptionLabel.text = detailItem.description
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        gradientView.setGradientBackground(colorOne: UIColor.clear, colorTwo: UIColor.black)
     }
     
-    func setDetailItem(newDetailItem: NSDate) {
+    private func configureView() {
+        guard let detailItem = detailItem else { return }
+        gradientView.isHidden = false
+        nameLabel.text = detailItem.name
+        priceLabel.text = detailItem.price
+        ratingLabel.text = businessService?.setRating()
+        reviewLabel.text = businessService?.setReview()
+        categoryLabel.text = businessService?.setCategory()
+        businessService?.setImage { [weak self] image in
+            DispatchQueue.main.async {
+                self?.imageview.image = image
+            }
+        }
+    }
+    
+    func setDetailItem(newDetailItem: YLPBusiness) {
         guard detailItem != newDetailItem else { return }
         detailItem = newDetailItem
-        configureView()
     }
     
     private func updateFavoriteBarButtonState() {
