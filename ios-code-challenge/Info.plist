@@ -53,5 +53,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationUsageDescription</key>
+	<string>We want your location to search for businesses near you</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We want your location to search for businesses near you</string>
 </dict>
 </plist>

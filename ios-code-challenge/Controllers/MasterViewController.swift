@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
 class MasterViewController: UITableViewController {
     
     var detailViewController: DetailViewController?
     private var business = YLPBusiness()
+    private var locationService = LocationService()
     
     lazy private var dataSource: NXTDataSource? = {
         guard let dataSource = NXTDataSource(objects: nil) else { return nil }
@@ -34,17 +36,7 @@ class MasterViewController: UITableViewController {
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         
-        let query = YLPSearchQuery(location: "5550 West Executive Dr. Tampa, FL 33609")
-        AFYelpAPIClient.shared().search(with: query, completionHandler: { [weak self] (searchResult, error) in
-            guard let strongSelf = self,
-                let dataSource = strongSelf.dataSource,
-                let businesses = searchResult?.businesses else {
-                    return
-            }
-            dataSource.setObjects(businesses)
-            dataSource.sort()
-            strongSelf.tableView.reloadData()
-        })
+        locationService.setDelegate(viewController: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -66,5 +58,30 @@ class MasterViewController: UITableViewController {
             }
         }
     }
+}
 
+extension MasterViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else { return }
+        locationService.stopUpdatingLocation()
+        searchBusinesses(near: location.coordinate)
+    }
+    
+    private func searchBusinesses(near coordinate: CLLocationCoordinate2D) {
+        let query = YLPCoordinateSearchQuery(coordinate: coordinate)
+        AFYelpAPIClient.shared()?.search(with: query, completionHandler: { [weak self] (searchResult, error) in
+            guard let strongSelf = self,
+                let dataSource = strongSelf.dataSource,
+                let businesses = searchResult?.businesses else {
+                    return
+            }
+            dataSource.setObjects(businesses)
+            dataSource.sort()
+            strongSelf.tableView.reloadData()
+        })
+    }
 }

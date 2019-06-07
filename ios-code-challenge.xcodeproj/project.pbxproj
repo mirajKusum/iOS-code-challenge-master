@@ -16,6 +16,8 @@
 		B9166FA022A9AF570071A4A7 /* BusinessService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9166F9F22A9AF570071A4A7 /* BusinessService.swift */; };
 		B9166FA322AA00800071A4A7 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9166FA222AA00800071A4A7 /* UIView+Extension.swift */; };
 		B9166FA522AA129D0071A4A7 /* NXTDataSource+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9166FA422AA129D0071A4A7 /* NXTDataSource+Extension.swift */; };
+		B9166FA722AA15C30071A4A7 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9166FA622AA15C30071A4A7 /* LocationService.swift */; };
+		B9166FA922AA1D6B0071A4A7 /* YLPCoordinateSearchQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9166FA822AA1D6B0071A4A7 /* YLPCoordinateSearchQuery.swift */; };
 		C5CEF1832013F25A009D1571 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5CEF1822013F25A009D1571 /* AppDelegate.m */; };
 		C5CEF18C2013F25A009D1571 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5CEF18A2013F25A009D1571 /* Main.storyboard */; };
 		C5CEF18E2013F25A009D1571 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5CEF18D2013F25A009D1571 /* Assets.xcassets */; };
@@ -66,6 +68,8 @@
 		B9166F9F22A9AF570071A4A7 /* BusinessService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessService.swift; sourceTree = "<group>"; };
 		B9166FA222AA00800071A4A7 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B9166FA422AA129D0071A4A7 /* NXTDataSource+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NXTDataSource+Extension.swift"; sourceTree = "<group>"; };
+		B9166FA622AA15C30071A4A7 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		B9166FA822AA1D6B0071A4A7 /* YLPCoordinateSearchQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YLPCoordinateSearchQuery.swift; sourceTree = "<group>"; };
 		C5CEF17E2013F25A009D1571 /* ios-code-challenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-code-challenge.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5CEF1812013F25A009D1571 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C5CEF1822013F25A009D1571 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				B9166F9F22A9AF570071A4A7 /* BusinessService.swift */,
+				B9166FA622AA15C30071A4A7 /* LocationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -270,6 +275,7 @@
 				C5CEF1CF2014E1FD009D1571 /* YLPBusiness.m */,
 				C5CEF1DA20153618009D1571 /* YLPBusiness+CellForObject.h */,
 				C5CEF1DB20153618009D1571 /* YLPBusiness+CellForObject.m */,
+				B9166FA822AA1D6B0071A4A7 /* YLPCoordinateSearchQuery.swift */,
 			);
 			path = YelpAPI;
 			sourceTree = "<group>";
@@ -487,6 +493,7 @@
 				B9166FA522AA129D0071A4A7 /* NXTDataSource+Extension.swift in Sources */,
 				B9166FA322AA00800071A4A7 /* UIView+Extension.swift in Sources */,
 				C5CEF1942013F25A009D1571 /* main.m in Sources */,
+				B9166FA922AA1D6B0071A4A7 /* YLPCoordinateSearchQuery.swift in Sources */,
 				C5CEF1CD2014DC36009D1571 /* YLPSearch.m in Sources */,
 				B9166FA022A9AF570071A4A7 /* BusinessService.swift in Sources */,
 				C5CEF1B92014411C009D1571 /* NXTDataSource.m in Sources */,
@@ -498,6 +505,7 @@
 				C5CEF1CA2014DB71009D1571 /* YLPSearchQuery.m in Sources */,
 				C5CEF1DC20153618009D1571 /* YLPBusiness+CellForObject.m in Sources */,
 				C5CEF1C0201446C1009D1571 /* AFYelpAPIClient.m in Sources */,
+				B9166FA722AA15C30071A4A7 /* LocationService.swift in Sources */,
 				C5CEF1C62014D6DB009D1571 /* AFYelpAPIClient+Search.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -669,7 +677,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8XCRURZB6Z;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ios-code-challenge/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -689,7 +697,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8XCRURZB6Z;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ios-code-challenge/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
