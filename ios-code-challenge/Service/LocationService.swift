@@ -17,6 +17,7 @@ struct LocationService {
         locationManager.startUpdatingLocation()
         return locationManager
     }()
+    var locationCoordinate: CLLocationCoordinate2D?
     
     mutating func setDelegate(viewController: CLLocationManagerDelegate) {
         locationManager.delegate = viewController

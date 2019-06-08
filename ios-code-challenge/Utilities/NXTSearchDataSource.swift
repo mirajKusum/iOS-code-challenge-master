@@ -7,10 +7,15 @@
 //
 
 import Foundation
+protocol NXTSearchDataSourceProtocol {
+    func loadMoreObjects(with offset: NSInteger)
+}
 
 class NXTSearchDataSource: NXTDataSource {
     var filteredObjects = [YLPBusiness]()
     var isFiltering: Bool = false
+    var total: NSInteger = 0
+    var delegate: NXTSearchDataSourceProtocol?
     
     func filterObjectForSearchText(_ search: String) {
         guard let objects = objects as? [YLPBusiness], !search.isEmpty else { return }
@@ -22,7 +27,9 @@ class NXTSearchDataSource: NXTDataSource {
         isFiltering = true
     }
     
-    func displayObject(at indexpath: IndexPath) -> NXTCellForObjectDelegate {
+    // MARK: - Private methods
+    
+    private func displayObject(at indexpath: IndexPath) -> NXTCellForObjectDelegate {
         let object: NXTCellForObjectDelegate
         
         if isFiltering {
@@ -34,6 +41,11 @@ class NXTSearchDataSource: NXTDataSource {
         return object
     }
     
+    func shouldLoadMoreObjects(after indexpath: IndexPath) -> Bool {
+        return indexpath.row == objects.count - 1 && objects.count <= total
+    }
+    
+    // MARK: - Tableview
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isFiltering ? filteredObjects.count : objects.count
@@ -44,6 +56,10 @@ class NXTSearchDataSource: NXTDataSource {
         let object = displayObject(at: indexPath)
         let cell : NXTDetailedBusinessTableViewCell = object.cellForObject(for: tableView) as! NXTDetailedBusinessTableViewCell
         cell.bindingData(for: object)
+        
+        if shouldLoadMoreObjects(after: indexPath) {
+            delegate?.loadMoreObjects(with: objects.count)
+        }
         
         return cell
     }

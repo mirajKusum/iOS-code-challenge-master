@@ -28,6 +28,7 @@ class MasterViewController: UITableViewController {
             }
             self?.performSegue(withIdentifier: "showDetail", sender: self)
         }
+        dataSource.delegate = self
         return dataSource
     }()
 
@@ -67,6 +68,8 @@ class MasterViewController: UITableViewController {
     }
 }
 
+// MARK: - CLLocationManagerDelegate
+
 extension MasterViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         
@@ -75,23 +78,28 @@ extension MasterViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }
         locationService.stopUpdatingLocation()
-        searchBusinesses(near: location.coordinate)
+        locationService.locationCoordinate = location.coordinate
+        searchBusinesses(near: location.coordinate, offset: 0)
     }
     
-    private func searchBusinesses(near coordinate: CLLocationCoordinate2D) {
-        let query = YLPCoordinateSearchQuery(coordinate: coordinate)
+    private func searchBusinesses(near coordinate: CLLocationCoordinate2D, offset: NSInteger) {
+        let query = YLPCoordinateSearchQuery(coordinate: coordinate, offset: offset)
         AFYelpAPIClient.shared()?.search(with: query, completionHandler: { [weak self] (searchResult, error) in
             guard let strongSelf = self,
                 let dataSource = strongSelf.dataSource,
-                let businesses = searchResult?.businesses else {
+                let businesses = searchResult?.businesses,
+                let total = searchResult?.total else {
                     return
             }
-            dataSource.setObjects(businesses)
+            (offset == 0) ? dataSource.setObjects(businesses) : dataSource.appendObjects(businesses)
+            dataSource.total = NSInteger(total)
             dataSource.sort()
             strongSelf.tableView.reloadData()
         })
     }
 }
+
+// MARK: - UISearchResultsUpdating
 
 extension MasterViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
@@ -103,13 +111,14 @@ extension MasterViewController: UISearchResultsUpdating, UISearchBarDelegate {
         dataSource?.isFiltering = false
         tableView.reloadData()
     }
-    
-    func searchBarIsEmpty() -> Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
+}
+
+// MARK: - NXTSearchDataSourceProtocol
+
+extension MasterViewController: NXTSearchDataSourceProtocol {
+    func loadMoreObjects(with offset: NSInteger) {
+        if let coordinate = locationService.locationCoordinate {
+            searchBusinesses(near: coordinate, offset: offset)
+        }
     }
-    
-    func isSearching() -> Bool {
-        return searchController.isActive && !searchBarIsEmpty()
-    }
-    
 }

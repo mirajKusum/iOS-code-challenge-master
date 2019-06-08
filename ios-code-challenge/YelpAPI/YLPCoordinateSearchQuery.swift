@@ -12,9 +12,11 @@ import CoreLocation
 class YLPCoordinateSearchQuery: YLPSearchQuery {
     
     var coordinate: CLLocationCoordinate2D
+    var offset: NSInteger
     
-    init(coordinate: CLLocationCoordinate2D) {
+    init(coordinate: CLLocationCoordinate2D, offset: NSInteger) {
         self.coordinate = coordinate
+        self.offset = offset
         super.init(location: "")
     }
     
@@ -23,6 +25,7 @@ class YLPCoordinateSearchQuery: YLPSearchQuery {
         
         params["latitude"] = coordinate.latitude
         params["longitude"] = coordinate.longitude
+        params["offset"] = offset
         if let term = term, radiusFilter > 0 {
             params["term"] = term
             params["radius"] = radiusFilter
