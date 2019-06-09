@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, assign) double distance;
 @property (nonatomic, readonly, copy) NSString *imageURLString;
 @property (nonatomic, readonly, copy) NSString *price;
+@property (nonatomic, assign) BOOL isFavorite;
 
 @end
 

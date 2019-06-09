@@ -33,6 +33,9 @@ class DetailViewController: UIViewController {
         guard let business = self.detailItem else { return nil }
         return BusinessService(business: business)
     }()
+    lazy private var dataService: DataService = {
+        return DataService()
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +64,7 @@ class DetailViewController: UIViewController {
                 self?.imageview.image = image
             }
         }
+        updateFavoriteBarButtonState()
     }
     
     func setDetailItem(newDetailItem: YLPBusiness) {
@@ -69,11 +73,21 @@ class DetailViewController: UIViewController {
     }
     
     private func updateFavoriteBarButtonState() {
-        favoriteBarButtonItem.image = isFavorite ? UIImage(named: "Star-Filled") : UIImage(named: "Star-Outline")
+        guard let detailItem = detailItem else {
+            favoriteBarButtonItem.image = UIImage(named: "Star-Outline")
+            return
+        }
+        favoriteBarButtonItem.image = detailItem.isFavorite ? UIImage(named: "Star-Filled") : UIImage(named: "Star-Outline")
     }
     
     @objc private func onFavoriteBarButtonSelected(_ sender: Any) {
-        _favorite.toggle()
+        detailItem?.isFavorite = true
         updateFavoriteBarButtonState()
+        saveItemToStore()
+    }
+    
+    private func saveItemToStore() {
+        guard let detailItem = detailItem else { return }
+        dataService.save(detailItem)
     }
 }

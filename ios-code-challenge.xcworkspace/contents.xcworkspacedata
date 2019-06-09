@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:ios-code-challenge/Model/Business+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:ios-code-challenge/Model/Business+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:ios-code-challenge.xcodeproj">
    </FileRef>
    <FileRef

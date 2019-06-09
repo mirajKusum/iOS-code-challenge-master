@@ -33,7 +33,7 @@ class NXTSearchDataSource: NXTDataSource {
         let object: NXTCellForObjectDelegate
         
         if isFiltering {
-            object = filteredObjects[indexpath.row]
+            object = filteredObjects[indexpath.row] as NXTCellForObjectDelegate
         } else {
             object = objects[indexpath.row] as! NXTCellForObjectDelegate
         }

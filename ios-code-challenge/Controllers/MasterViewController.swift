@@ -31,6 +31,9 @@ class MasterViewController: UITableViewController {
         dataSource.delegate = self
         return dataSource
     }()
+    lazy private var dataService: DataService = {
+        return DataService()
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,11 +94,27 @@ extension MasterViewController: CLLocationManagerDelegate {
                 let total = searchResult?.total else {
                     return
             }
+            self?.setFavorites(for: businesses)
             (offset == 0) ? dataSource.setObjects(businesses) : dataSource.appendObjects(businesses)
             dataSource.total = NSInteger(total)
             dataSource.sort()
             strongSelf.tableView.reloadData()
         })
+    }
+    
+    private func setFavorites(for objects: [YLPBusiness]) {
+        var favorites = [YLPBusiness]()
+        dataService.fetchData { businesses in
+            favorites = businesses
+        }
+        if favorites.isEmpty {
+            return
+        }
+        
+        for favorite in favorites {
+            let favoriteObject: [YLPBusiness] = objects.filter { $0.identifier == favorite.identifier }
+            favoriteObject.first?.isFavorite = true
+        }
     }
 }
 

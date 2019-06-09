@@ -21,6 +21,7 @@
         _price = attributes[@"price"];
         _imageURLString = attributes[@"image_url"];
         _categories = attributes[@"categories"];
+        _isFavorite = attributes[@"isFavorite"] != nil ? attributes[@"isFavorite"] : false;
     }
     
     return self;
